@@ -1,0 +1,7 @@
+Setting up a docker registry locally wsith Portainer.
+
+1. Create new container in Portainer.
+    Image: registry:latest
+    Name: registry
+    Port: 5000:5000
+
