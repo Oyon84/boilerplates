@@ -1,3 +1,7 @@
+LABEL version="0.1" \ 
+      maintainer="Christiaan Verschoor <christiaanverschoor@fhs7.nl>" \
+      description="Quick and dirty laravel dockerfile, uses the internal webserver from Laravel."
+
 FROM php:8.2.23-zts-alpine3.20
 WORKDIR /var/www/html
 
