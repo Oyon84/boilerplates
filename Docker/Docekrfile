@@ -2,8 +2,12 @@
 # Use this to deploy a acceptance instance for validating purpose, or testing infrastructure. 
 # Production infrastructure should work with dedicated web server instance such as NGINX.
 
+# Base image with PHP installed and working folder
+
 FROM php:8.2.23-zts-alpine3.20
 WORKDIR /var/www/html
+
+# Prepare image for Laravel application
 
 RUN apk update && \
     #
@@ -11,6 +15,7 @@ RUN apk update && \
     #
     apk add icu-dev npm libzip-dev && \
     docker-php-ext-install intl zip && \
+    docker-php-ext-install exif && \
     curl -sS https://getcomposer.org/installer | php -- --version=2.7.9 --install-dir=/usr/local/bin --filename=composer && \
     #
     # Copy production ready php.ini file to be used as php.ini
@@ -22,11 +27,17 @@ RUN apk update && \
     sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 128M/g' /usr/local/etc/php/php.ini && \
     sed -i 's/post_max_size = 8M/post_max_size = 128M/g' /usr/local/etc/php/php.ini
 
+# Copy the laravel application to the working folder
+
 COPY . . 
+
+# Prepare laravel application by running composer and npm
 
 RUN mv .env.production .env && \
     #chown public/storage && \
     composer install --no-dev && npm install && \
     npm run build && php artisan storage:link
+
+# Commando to run the internal web server exposed to the outside world
 
 CMD ["php","artisan","serve","--host=0.0.0.0"]
