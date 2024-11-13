@@ -6,5 +6,6 @@ These files can serve as boilerplates or starting points for different services:
 - PHP
 - Laravel
 - Bash
+- Powershell
 
 Use at own risk.
